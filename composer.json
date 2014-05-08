@@ -1,0 +1,28 @@
+{
+	"name": "arron/cli-texy-translator",
+	"description": "",
+	"type": "library",
+	"keywords": [
+
+	],
+	"license": "GPL (optional either v2 or any later version)",
+	"require": {
+		"php": ">=5.3.3",
+		"symfony/console": "*",
+		"texy/texy": "*",
+		"latte/latte": "dev-master",
+		"kukulich/fshl": "*"
+	},
+	"require-dev": {
+
+	},
+	"autoload": {
+		"classmap": ["Convertor/"]
+	},
+	"authors": [
+		{
+			"name": "Tomáš Lembacher",
+			"email": "tomas.lembacher@gmail.com"
+		}
+	]
+}
