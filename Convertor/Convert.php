@@ -63,7 +63,7 @@ class Convert extends Command
 		$to = $input->getArgument('target');
 
 		if(file_exists($to) && !$input->getOption('force')) {
-			throw new \InvalidArgumentException("File $to already exists. Use --force option to force rewrite it.");
+			throw new \InvalidArgumentException("Target file $to already exists. Use --force option to force rewrite it.");
 		}
 
 		$fileExtension = strtolower(end(explode('.',$to)));
@@ -80,12 +80,12 @@ class Convert extends Command
 				break;
 
 			default:
-				throw new \InvalidArgumentException("Destination format $fileExtension is not supported.");
+				throw new \InvalidArgumentException("Destination format '$fileExtension' is not supported.");
 		}
 
 
 		if(!file_exists($from)) {
-			throw new \InvalidArgumentException("File $from doesn't exist.");
+			throw new \InvalidArgumentException("Source file $from doesn't exist.");
 		}
 
 		$source = file_get_contents($from);
