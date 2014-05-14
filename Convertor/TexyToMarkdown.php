@@ -80,7 +80,7 @@ class TexyToMarkdown extends \Texy
 		$this->allowed['link/definition'] = FALSE;
 		$this->allowed['list'] = FALSE;
 		$this->allowed['list/definition'] = FALSE;
-		$this->allowed['paragraph'] = FALSE;
+		$this->allowed['paragraph'] = TRUE;
 		$this->allowed['table'] = FALSE;
 		$this->allowed['typography'] = FALSE;
 		$this->allowed['longwords'] = FALSE;
@@ -112,6 +112,7 @@ class TexyToMarkdown extends \Texy
 		$this->addHandler('block', array($this, 'blockHandler'));
 		$this->addHandler('afterBlockquote', array($this, 'afterBlockquoteHandler'));
 		$this->addHandler('emoticon', array($this, 'emoticonHandler'));
+		$this->addHandler('paragraph', array($this, 'paragraphHandler'));
 	}
 
 	/**
@@ -216,6 +217,14 @@ class TexyToMarkdown extends \Texy
 	public function emoticonHandler(TexyHandlerInvocation $invocation, $emoticon, $raw)
 	{
 		return $emoticon;
+	}
+
+	public function paragraphHandler(TexyHandlerInvocation $invocation, $content, TexyModifier $mod = NULL)
+	{
+		$el = TexyHtml::el();
+		$el->parseLine($this, $content);
+		$content = $el->getText(); // string
+		return $content.  "\n\n";
 	}
 }
  
