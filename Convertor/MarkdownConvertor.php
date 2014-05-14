@@ -24,7 +24,10 @@ class MarkdownConvertor implements IConvertor
 
 	public function convert($input)
 	{
-		return $this->texy2markdown($input);
+		$texy = new TexyToMarkdown();
+		return $texy->process($input);
+
+		//return $this->texy2markdown($input);
 	}
 
 	/*private function markdown2texy($s) // maybe @TODO someday
