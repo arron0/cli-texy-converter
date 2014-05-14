@@ -67,8 +67,8 @@ class TexyToMarkdown extends \Texy
 		$this->allowed['emoticon'] = TRUE;
 		$this->allowed['heading/underlined'] = TRUE;
 		$this->allowed['heading/surrounded'] = TRUE;
-		$this->allowed['html/tag'] = FALSE;
-		$this->allowed['html/comment'] = FALSE;
+		$this->allowed['html/tag'] = TRUE;
+		$this->allowed['html/comment'] = TRUE;
 		$this->allowed['horizline'] = FALSE;
 		$this->allowed['image'] = FALSE;
 		$this->allowed['image/definition'] = FALSE;
@@ -113,6 +113,8 @@ class TexyToMarkdown extends \Texy
 		$this->addHandler('afterBlockquote', array($this, 'afterBlockquoteHandler'));
 		$this->addHandler('emoticon', array($this, 'emoticonHandler'));
 		$this->addHandler('paragraph', array($this, 'paragraphHandler'));
+		$this->addHandler('htmlTag', array($this, 'htmlTagHandler'));
+		$this->addHandler('htmlComment', array($this, 'htmlCommentHandler'));
 	}
 
 	/**
@@ -219,12 +221,44 @@ class TexyToMarkdown extends \Texy
 		return $emoticon;
 	}
 
+	/**
+	 * @param TexyHandlerInvocation $invocation
+	 * @param $content
+	 * @param TexyModifier $mod
+	 *
+	 * @return string
+	 */
 	public function paragraphHandler(TexyHandlerInvocation $invocation, $content, TexyModifier $mod = NULL)
 	{
 		$el = TexyHtml::el();
 		$el->parseLine($this, $content);
 		$content = $el->getText(); // string
 		return $content.  "\n\n";
+	}
+
+	/**
+	 * @param TexyHandlerInvocation $invocation
+	 * @param TexyHtml $el
+	 * @param boolean $isStart
+	 * @param boolean $forceEmpty
+	 *
+	 * @return string
+	 */
+	public function htmlTagHandler(TexyHandlerInvocation $invocation, TexyHtml $el, $isStart, $forceEmpty)
+	{
+		$result = $isStart ? $el->startTag() : $el->endTag();
+		return $result;
+	}
+
+	/**
+	 * @param TexyHandlerInvocation $invocation
+	 * @param string $content
+	 *
+	 * @return string
+	 */
+	public function htmlCommentHandler(TexyHandlerInvocation $invocation, $content)
+	{
+		return '<!-- ' . $content . '-->';
 	}
 }
  
