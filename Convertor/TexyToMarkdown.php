@@ -64,7 +64,7 @@ class TexyToMarkdown extends \Texy
 		$this->allowed['block/div'] = TRUE;
 		$this->allowed['blocks'] = TRUE;
 		$this->allowed['blockquote'] = TRUE;
-		$this->allowed['emoticons'] = FALSE;
+		$this->allowed['emoticon'] = TRUE;
 		$this->allowed['heading/underlined'] = TRUE;
 		$this->allowed['heading/surrounded'] = TRUE;
 		$this->allowed['html/tag'] = FALSE;
@@ -111,6 +111,7 @@ class TexyToMarkdown extends \Texy
 		$this->addHandler('heading', array($this, 'headingHandler'));
 		$this->addHandler('block', array($this, 'blockHandler'));
 		$this->addHandler('afterBlockquote', array($this, 'afterBlockquoteHandler'));
+		$this->addHandler('emoticon', array($this, 'emoticonHandler'));
 	}
 
 	/**
@@ -190,6 +191,11 @@ class TexyToMarkdown extends \Texy
 		return "```$lang\n$content\n```\n\n";
 	}
 
+	/**
+	 * @param TexyBlockParser $parser
+	 * @param TexyHtml $el
+	 * @param TexyModifier $mod
+	 */
 	public function afterBlockquoteHandler(TexyBlockParser $parser, TexyHtml $el, TexyModifier $mod)
 	{
 		$el->setName(NULL);
@@ -198,6 +204,18 @@ class TexyToMarkdown extends \Texy
 		}
 		$s = $el->toString($this);
 		$el->setText('> ' . $s. "\n\n");
+	}
+
+	/**
+	 * @param TexyHandlerInvocation $invocation
+	 * @param string $emoticon
+	 * @param string $raw
+	 *
+	 * @return string
+	 */
+	public function emoticonHandler(TexyHandlerInvocation $invocation, $emoticon, $raw)
+	{
+		return $emoticon;
 	}
 }
  
