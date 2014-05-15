@@ -69,7 +69,7 @@ class TexyToMarkdown extends \Texy
 		$this->allowed['heading/surrounded'] = TRUE;
 		$this->allowed['html/tag'] = TRUE;
 		$this->allowed['html/comment'] = TRUE;
-		$this->allowed['horizline'] = FALSE;
+		$this->allowed['horizline'] = TRUE;
 		$this->allowed['image'] = FALSE;
 		$this->allowed['image/definition'] = FALSE;
 		$this->allowed['image/hover'] = FALSE;
@@ -115,6 +115,7 @@ class TexyToMarkdown extends \Texy
 		$this->addHandler('paragraph', array($this, 'paragraphHandler'));
 		$this->addHandler('htmlTag', array($this, 'htmlTagHandler'));
 		$this->addHandler('htmlComment', array($this, 'htmlCommentHandler'));
+		$this->addHandler('horizline', array($this, 'horizlineHandler'));
 	}
 
 	/**
@@ -259,6 +260,16 @@ class TexyToMarkdown extends \Texy
 	public function htmlCommentHandler(TexyHandlerInvocation $invocation, $content)
 	{
 		return '<!-- ' . $content . '-->';
+	}
+
+	/**
+	 * @param TexyHandlerInvocation $invocation
+	 * @param string $type
+	 * @param TexyModifier $mod
+	 */
+	public function horizlineHandler(TexyHandlerInvocation $invocation, $type, TexyModifier $mod)
+	{
+		return $type . "\n\n";
 	}
 }
  
