@@ -21,6 +21,7 @@ use TexyHorizLineModule;
 use TexyHtml;
 use TexyHtmlModule;
 use TexyHtmlOutputModule;
+use TexyImage;
 use TexyImageModule;
 use TexyLink;
 use TexyLinkModule;
@@ -70,10 +71,10 @@ class TexyToMarkdown extends \Texy
 		$this->allowed['html/tag'] = TRUE;
 		$this->allowed['html/comment'] = TRUE;
 		$this->allowed['horizline'] = TRUE;
-		$this->allowed['image'] = FALSE;
-		$this->allowed['image/definition'] = FALSE;
-		$this->allowed['image/hover'] = FALSE;
-		$this->allowed['figure'] = FALSE;
+		$this->allowed['image'] = TRUE;
+		$this->allowed['image/definition'] = TRUE;
+		$this->allowed['image/hover'] = TRUE;
+		$this->allowed['figure'] = TRUE;
 		$this->allowed['link/reference'] = FALSE;
 		$this->allowed['link/email'] = FALSE;
 		$this->allowed['link/url'] = FALSE;
@@ -116,6 +117,8 @@ class TexyToMarkdown extends \Texy
 		$this->addHandler('htmlTag', array($this, 'htmlTagHandler'));
 		$this->addHandler('htmlComment', array($this, 'htmlCommentHandler'));
 		$this->addHandler('horizline', array($this, 'horizlineHandler'));
+		$this->addHandler('image', array($this, 'imageHandler'));
+		$this->addHandler('figure', array($this, 'figureHandler'));
 	}
 
 	/**
@@ -270,6 +273,35 @@ class TexyToMarkdown extends \Texy
 	public function horizlineHandler(TexyHandlerInvocation $invocation, $type, TexyModifier $mod)
 	{
 		return $type . "\n\n";
+	}
+
+	/**
+	 * @param TexyHandlerInvocation $invocation
+	 * @param TexyImage $image
+	 * @param TexyLink $link
+	 *
+	 * @return string
+	 */
+	public function imageHandler(TexyHandlerInvocation $invocation, TexyImage $image, TexyLink $link = NULL)
+	{
+		//  ![Alt text](/path/to/img.jpg "Optional title")
+		$altText = empty($image->modifier->title) ? $image->URL : $image->modifier->title;
+		return "![$altText]({$image->URL})";
+	}
+
+	/**
+	 * @param TexyHandlerInvocation $invocation
+	 * @param TexyImage $image
+	 * @param TexyLink $link
+	 * @param string $content
+	 * @param TexyModifier $mod
+	 *
+	 * @return string
+	 */
+	public function figureHandler(TexyHandlerInvocation $invocation, TexyImage $image, $link, $content, TexyModifier $mod)
+	{
+		$altText = empty($image->modifier->title) ? $image->URL : $image->modifier->title;
+		return "![$altText]({$image->URL} \"$content\")";
 	}
 }
  
