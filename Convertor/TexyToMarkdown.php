@@ -176,6 +176,7 @@ class TexyToMarkdown extends \Texy
 		$this->listModule = new TexyListModule($this);
 
 		// post process
+		// don't want even register their event, they are altering output
 		//$this->typographyModule = new TexyTypographyModule($this);
 		//$this->longWordsModule = new TexyLongWordsModule($this);
 		//$this->htmlOutputModule = new TexyHtmlOutputModule($this);
@@ -299,6 +300,8 @@ class TexyToMarkdown extends \Texy
 	 * @param TexyHandlerInvocation $invocation
 	 * @param string $type
 	 * @param TexyModifier $mod
+	 *
+	 * @return string
 	 */
 	public function horizlineHandler(TexyHandlerInvocation $invocation, $type, TexyModifier $mod)
 	{
@@ -334,6 +337,13 @@ class TexyToMarkdown extends \Texy
 		return "![$altText]({$image->URL} \"$content\")";
 	}
 
+	/**
+	 * @param TexyHandlerInvocation $invocation
+	 * @param TexyLink $link
+	 * @param string $content
+	 *
+	 * @return string
+	 */
 	public function linkReferenceHandler(TexyHandlerInvocation $invocation, TexyLink $link, $content)
 	{
 		// [id]: http://example.com/  "Optional Title Here"
@@ -343,18 +353,39 @@ class TexyToMarkdown extends \Texy
 		return $markdownLink;
 	}
 
+	/**
+	 * @param TexyHandlerInvocation $invocation
+	 * @param TexyLink $link
+	 *
+	 * @return string
+	 */
 	public function linkEmailHandler(TexyHandlerInvocation $invocation, TexyLink $link)
 	{
 		//raw email somewhere in the text. Leaving unchanged, let the markdown dwal with it
 		return $link->raw;
 	}
 
+	/**
+	 * @param TexyHandlerInvocation $invocation
+	 * @param TexyLink $link
+	 *
+	 * @return string
+	 */
 	public function linkUrlHandler(TexyHandlerInvocation $invocation, TexyLink $link)
 	{
 		//raw url somewhere in the text. Leaving unchanged, let the markdown deal with it.
 		return $link->raw;
 	}
 
+	/**
+	 * @param TexyHandlerInvocation $invocation
+	 * @param string $phrase Phrase name
+	 * @param string $content
+	 * @param TexyModifier $mod
+	 * @param TexyLink $link
+	 *
+	 * @return string
+	 */
 	public function phraseHandler(TexyHandlerInvocation $invocation, $phrase, $content, TexyModifier $mod, TexyLink $link = NULL)
 	{
 		if ($link) {
