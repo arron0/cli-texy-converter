@@ -125,11 +125,11 @@ class TexyToMarkdown extends \Texy
 		$this->allowed['phrase/span'] = TRUE;
 		$this->allowed['phrase/span-alt'] = TRUE;
 		$this->allowed['phrase/cite'] = TRUE;
-		$this->allowed['phrase/quote'] = FALSE;
+		$this->allowed['phrase/quote'] = FALSE; // leave it unchanged
 		$this->allowed['phrase/acronym'] = TRUE;
 		$this->allowed['phrase/acronym-alt'] = TRUE;
 		$this->allowed['phrase/notexy'] = TRUE;
-		$this->allowed['phrase/code'] = FALSE;
+		$this->allowed['phrase/code'] = FALSE; // leave it unchanged
 		$this->allowed['phrase/quicklink'] = TRUE;
 		$this->allowed['phrase/wikilink'] = TRUE;
 		$this->allowed['phrase/markdown'] = FALSE; // leave it unchanged
