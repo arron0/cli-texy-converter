@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-namespace Arron\Translator;
+namespace Arron\Convertor;
 
 use Symfony\Component\Console\Application;
 

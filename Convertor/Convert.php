@@ -8,7 +8,7 @@
  * @license
  */
 
-namespace Arron\Translator;
+namespace Arron\Convertor;
 
 use FSHL\Lexer\Cache\Html;
 use Symfony\Component\Console\Command\Command;

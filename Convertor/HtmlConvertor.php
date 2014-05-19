@@ -8,7 +8,7 @@
  * @license
  */
 
-namespace Arron\Translator;
+namespace Arron\Convertor;
 
 
 /**
@@ -24,7 +24,7 @@ class HtmlConvertor implements IConvertor
 
 	public function convert($input)
 	{
-		$convertor = new Texy();
+		$convertor = new \Texy();
 		return $convertor->process($input);
 	}
 }
