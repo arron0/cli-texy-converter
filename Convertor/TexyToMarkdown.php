@@ -44,11 +44,37 @@ use TexyTypographyModule;
  */
 class TexyToMarkdown extends \Texy
 {
+	public $phrasesTranslation = array(
+			'phrase/strong+em' => array('_**', "**_"),
+			'phrase/strong' => array('**', '**'),
+			'phrase/em' => array('_', '_'),
+			'phrase/em-alt' => array('*', '*'),
+			'phrase/em-alt2' => array('*', '*'),
+			'phrase/ins' => array('<ins>', '</ins>'),
+			'phrase/del' => array('<del>', '</del>'),
+			'phrase/sup' => array('<sup>', '</sup>'),
+			'phrase/sup-alt' => array('<sup>', '</sup>'),
+			'phrase/sub' => array('<sup>', '</sup>'),
+			'phrase/sub-alt' => array('<sup>', '</sup>'),
+			'phrase/span' => array('<span>', '</span>'),
+			'phrase/span-alt' => array('<span>', '</span>'),
+			'phrase/cite' => array('<cite>', '</cite>'),
+			'phrase/quote' => array('>>', '<<'), // disabled
+			'phrase/acronym' => array('', ''),
+			'phrase/acronym-alt' => array('', ''),
+			'phrase/notexy' => array('', ''),
+			'phrase/code' => array('`', '`'), // disabled
+			'phrase/quicklink' => array(),
+			'phrase/wikilink' => array(),
+			'phrase/markdown' => array(), // disabled
+	);
+
 	function __construct()
 	{
 		parent::__construct();
 
 		self::$advertisingNotice = FALSE;
+		$this->mergeLines = FALSE;
 
 		$this->headingModule->top = 1;
 
@@ -75,39 +101,39 @@ class TexyToMarkdown extends \Texy
 		$this->allowed['image/definition'] = TRUE;
 		$this->allowed['image/hover'] = TRUE;
 		$this->allowed['figure'] = TRUE;
-		$this->allowed['link/reference'] = FALSE;
-		$this->allowed['link/email'] = FALSE;
-		$this->allowed['link/url'] = FALSE;
-		$this->allowed['link/definition'] = FALSE;
-		$this->allowed['list'] = FALSE;
-		$this->allowed['list/definition'] = FALSE;
+		$this->allowed['link/reference'] = TRUE;
+		$this->allowed['link/email'] = TRUE;
+		$this->allowed['link/url'] = TRUE;
+		$this->allowed['link/definition'] = TRUE;
+		$this->allowed['list'] = FALSE; // unable to modify texy ouput, leaving unchanged
+		$this->allowed['list/definition'] = FALSE;// unable to modify texy ouput, leaving unchanged
 		$this->allowed['paragraph'] = TRUE;
-		$this->allowed['table'] = FALSE;
-		$this->allowed['typography'] = FALSE;
-		$this->allowed['longwords'] = FALSE;
-		$this->allowed['phrase/strong+em'] = FALSE;
-		$this->allowed['phrase/strong'] = FALSE;
-		$this->allowed['phrase/em'] = FALSE;
-		$this->allowed['phrase/em-alt'] = FALSE;
-		$this->allowed['phrase/em-alt2'] = FALSE;
-		$this->allowed['phrase/ins'] = FALSE;
-		$this->allowed['phrase/del'] = FALSE;
-		$this->allowed['phrase/sup'] = FALSE;
-		$this->allowed['phrase/sup-alt'] = FALSE;
-		$this->allowed['phrase/sub'] = FALSE;
-		$this->allowed['phrase/sub-alt'] = FALSE;
-		$this->allowed['phrase/span'] = FALSE;
-		$this->allowed['phrase/span-alt'] = FALSE;
-		$this->allowed['phrase/cite'] = FALSE;
+		$this->allowed['table'] = FALSE; // unable to modify texy ouput, leaving unchanged
+		$this->allowed['typography'] = FALSE; // don't want to mess with text, let mardown to deal with it
+		$this->allowed['longwords'] = FALSE; // don't want to mess with text, let mardown to deal with it
+		$this->allowed['phrase/strong+em'] = TRUE;
+		$this->allowed['phrase/strong'] = TRUE;
+		$this->allowed['phrase/em'] = TRUE;
+		$this->allowed['phrase/em-alt'] = TRUE;
+		$this->allowed['phrase/em-alt2'] = TRUE;
+		$this->allowed['phrase/ins'] = TRUE;
+		$this->allowed['phrase/del'] = TRUE;
+		$this->allowed['phrase/sup'] = TRUE;
+		$this->allowed['phrase/sup-alt'] = TRUE;
+		$this->allowed['phrase/sub'] = TRUE;
+		$this->allowed['phrase/sub-alt'] = TRUE;
+		$this->allowed['phrase/span'] = TRUE;
+		$this->allowed['phrase/span-alt'] = TRUE;
+		$this->allowed['phrase/cite'] = TRUE;
 		$this->allowed['phrase/quote'] = FALSE;
-		$this->allowed['phrase/acronym'] = FALSE;
-		$this->allowed['phrase/acronym-alt'] = FALSE;
-		$this->allowed['phrase/notexy'] = FALSE;
+		$this->allowed['phrase/acronym'] = TRUE;
+		$this->allowed['phrase/acronym-alt'] = TRUE;
+		$this->allowed['phrase/notexy'] = TRUE;
 		$this->allowed['phrase/code'] = FALSE;
-		$this->allowed['phrase/quicklink'] = FALSE;
-		$this->allowed['phrase/wikilink'] = FALSE;
-		$this->allowed['phrase/markdown'] = FALSE;
-		$this->allowed['script'] = FALSE;
+		$this->allowed['phrase/quicklink'] = TRUE;
+		$this->allowed['phrase/wikilink'] = TRUE;
+		$this->allowed['phrase/markdown'] = FALSE; // leave it unchanged
+		$this->allowed['script'] = FALSE; // leave it unchanged. Or shoud I filter it?
 
 		$this->addHandler('heading', array($this, 'headingHandler'));
 		$this->addHandler('block', array($this, 'blockHandler'));
@@ -119,6 +145,10 @@ class TexyToMarkdown extends \Texy
 		$this->addHandler('horizline', array($this, 'horizlineHandler'));
 		$this->addHandler('image', array($this, 'imageHandler'));
 		$this->addHandler('figure', array($this, 'figureHandler'));
+		$this->addHandler('linkReference', array($this, 'linkReferenceHandler'));
+		$this->addHandler('linkEmail', array($this, 'linkEmailHandler'));
+		$this->addHandler('linkURL', array($this, 'linkUrlHandler'));
+		$this->addHandler('phrase', array($this, 'phraseHandler'));
 	}
 
 	/**
@@ -302,6 +332,44 @@ class TexyToMarkdown extends \Texy
 	{
 		$altText = empty($image->modifier->title) ? $image->URL : $image->modifier->title;
 		return "![$altText]({$image->URL} \"$content\")";
+	}
+
+	public function linkReferenceHandler(TexyHandlerInvocation $invocation, TexyLink $link, $content)
+	{
+		// [id]: http://example.com/  "Optional Title Here"
+		$protectedLink = $this->protect($link->URL, self::CONTENT_TEXTUAL);
+		$linkText = !empty($content) ? $content : (!empty($link->label) ? $link->label : $protectedLink);
+		$markdownLink = "[{$linkText}]($protectedLink)";
+		return $markdownLink;
+	}
+
+	public function linkEmailHandler(TexyHandlerInvocation $invocation, TexyLink $link)
+	{
+		//raw email somewhere in the text. Leaving unchanged, let the markdown dwal with it
+		return $link->raw;
+	}
+
+	public function linkUrlHandler(TexyHandlerInvocation $invocation, TexyLink $link)
+	{
+		//raw url somewhere in the text. Leaving unchanged, let the markdown deal with it.
+		return $link->raw;
+	}
+
+	public function phraseHandler(TexyHandlerInvocation $invocation, $phrase, $content, TexyModifier $mod, TexyLink $link = NULL)
+	{
+		if ($link) {
+			return $this->linkReferenceHandler($invocation, $link, $content);
+		}
+
+		if($phrase === 'phrase/acronym' || $phrase === 'phrase/acronym-alt') {
+			return "$content ({$mod->title})"; // pure translation to pharenses
+			//return "*[$content]: {$mod->title}"; // may work with some acronyme module to markdown (not with github)
+		}
+
+		if($phrase !== 'phrase/wikilink' && $phrase !== 'phrase/quicklink') {
+			return $this->phrasesTranslation[$phrase][0] . $content . $this->phrasesTranslation[$phrase][1];
+		}
+		return $content;
 	}
 }
  
