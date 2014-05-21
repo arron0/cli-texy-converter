@@ -237,7 +237,9 @@ class TexyToMarkdown extends \Texy
 	{
 		$el->setName(NULL);
 		foreach($el->getChildren() as $children) {
-			$children->setName(NULL);
+			if($children instanceof TexyHtml) {
+				$children->setName(NULL);
+			}
 		}
 		$s = $el->toString($this);
 		$el->setText('> ' . $s. "\n\n");
