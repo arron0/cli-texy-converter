@@ -73,7 +73,6 @@ class TexyToMarkdown extends \Texy
 	{
 		parent::__construct();
 
-		self::$advertisingNotice = FALSE;
 		$this->mergeLines = FALSE;
 
 		$this->headingModule->top = 1;
