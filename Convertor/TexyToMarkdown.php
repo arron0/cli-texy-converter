@@ -242,7 +242,7 @@ class TexyToMarkdown extends \Texy
 			}
 		}
 		$s = $el->toString($this);
-		$el->setText('> ' . $s. "\n\n");
+		$el->setText('> ' . $s);
 	}
 
 	/**
