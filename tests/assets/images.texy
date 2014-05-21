@@ -1,0 +1,15 @@
+[* image.gif *]
+
+[* image.gif <]
+
+[* image.gif >]
+
+[* image.gif 10x20 *]
+
+[* image.gif .(alt text)[foto] *]
+
+[* img1.jpg .(nejakej alt) *]:www.example.com
+
+"[* obrazky/14_nahled.jpg .(Popis fotky) *]":[* obrazky/14.jpg *]
+
+[* image.gif *] *** This is image with description

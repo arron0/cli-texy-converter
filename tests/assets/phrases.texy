@@ -1,0 +1,43 @@
+***strong+emphasis***
+
+**strong**
+
+//emphasis//
+
+*emphasisAlt*
+
+*emphasisAlt2*
+
+++inserted++
+
+--deleted--
+
+^^superscript^^
+
+m^2 alternative superscript
+
+__subscript__
+
+m_2 alternative subscript
+
+"span"
+
+~alternative span~
+
+~~cite~~
+
+This is some >>quote<< in the text.
+
+acronym/abbr "et al."((and others))
+
+acronym/abbr NATO((North Atlantic Treaty Organisation))
+
+''notexy''
+
+`code`
+
+"Google":google.com
+
+[Google |google.com]
+
+[Google](google.com)
