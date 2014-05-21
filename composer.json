@@ -14,7 +14,7 @@
 		"kukulich/fshl": "*"
 	},
 	"require-dev": {
-
+		"arron/testit": "*"
 	},
 	"autoload": {
 		"classmap": ["Convertor/"]
