@@ -8,7 +8,7 @@
  * @license
  */
 
-namespace Arron\Convertor;
+namespace Arron\Converter;
 
 use FSHL\Lexer\Cache\Html;
 use Symfony\Component\Console\Command\Command;
@@ -32,14 +32,14 @@ class Convert extends Command
 	{
 		$this
 				->setName('texy')
-				->setDescription('Convert from texy.')
+				->setDescription('Convert from Texy.')
 				->addArgument(
 						'from',
 						InputArgument::REQUIRED,
 						'Texy source file.'
 				)
 				->addArgument(
-						'target',
+						'to',
 						InputArgument::REQUIRED,
 						'Target file.'
 				)
@@ -60,7 +60,7 @@ class Convert extends Command
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$from = $input->getArgument('from');
-		$to = $input->getArgument('target');
+		$to = $input->getArgument('to');
 
 		if(file_exists($to) && !$input->getOption('force')) {
 			throw new \InvalidArgumentException("Target file $to already exists. Use --force option to force rewrite it.");
@@ -72,11 +72,11 @@ class Convert extends Command
 		switch($fileExtension) {
 			case 'html' :
 			case 'htm' :
-				$translator = new HtmlConvertor();
+				$translator = new HtmlConverter();
 				break;
 
 			case 'md' :
-				$translator = new MarkdownConvertor();
+				$translator = new MarkdownConverter();
 				break;
 
 			default:

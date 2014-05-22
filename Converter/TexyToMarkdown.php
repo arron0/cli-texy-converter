@@ -8,7 +8,7 @@
  * @license
  */
 
-namespace Arron\Convertor;
+namespace Arron\Converter;
 
 use TexyBlockModule;
 use TexyBlockParser;

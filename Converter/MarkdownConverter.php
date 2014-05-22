@@ -8,17 +8,22 @@
  * @license
  */
 
-namespace Arron\Convertor;
-
+namespace Arron\Converter;
 
 /**
- * IConvertor interface definition
+ * MarkdownConverter class definition
  *
  * @package
  * @subpackage
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license
  */
-interface IConvertor {
-	public function convert($input);
-} 
+class MarkdownConverter implements IConverter
+{
+	public function convert($input)
+	{
+		$texy = new TexyToMarkdown();
+		return $texy->process($input);
+	}
+}
+ 

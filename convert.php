@@ -8,12 +8,12 @@
  * @license MIT
  */
 
-namespace Arron\Convertor;
+namespace Arron\Converter;
 
 use Symfony\Component\Console\Application;
 
 require_once "vendor/autoload.php";
 
-$application = new Application();
+$application = new Application('Texy converter', '1.0.0');
 $application->add(new Convert());
 $application->run();

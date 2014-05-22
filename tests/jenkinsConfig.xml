@@ -14,7 +14,7 @@
 		>
 	<filter>
 		<whitelist addUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">../TestIt</directory>
+			<directory suffix=".php">../Converter</directory>
 		</whitelist>
 	</filter>
 </phpunit>

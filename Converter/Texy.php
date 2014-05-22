@@ -8,7 +8,7 @@
  * @license
  */
 
-namespace Arron\Convertor;
+namespace Arron\Converter;
 
 use FSHL\Highlighter;
 use FSHL\Output;

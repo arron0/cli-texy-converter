@@ -23,7 +23,7 @@ class TexyToMarkdownUnitTest extends \Arron\TestIt\TestCase
 	 */
 	protected function createTestObject()
 	{
-		return new \Arron\Convertor\MarkdownConvertor();
+		return new \Arron\Converter\MarkdownConverter();
 	}
 
 	/**

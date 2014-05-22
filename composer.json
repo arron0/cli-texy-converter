@@ -1,5 +1,5 @@
 {
-	"name": "arron/cli-texy-convertor",
+	"name": "arron/cli-texy-converter",
 	"description": "",
 	"type": "library",
 	"keywords": [
@@ -17,7 +17,7 @@
 		"arron/testit": "*"
 	},
 	"autoload": {
-		"classmap": ["Convertor/"]
+		"classmap": ["Converter/"]
 	},
 	"authors": [
 		{

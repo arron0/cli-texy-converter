@@ -8,24 +8,17 @@
  * @license
  */
 
-namespace Arron\Convertor;
+namespace Arron\Converter;
 
 
 /**
- * HtmlConvertor class definition
+ * IConverter interface definition
  *
  * @package
  * @subpackage
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license
  */
-class HtmlConvertor implements IConvertor
-{
-
-	public function convert($input)
-	{
-		$convertor = new \Texy();
-		return $convertor->process($input);
-	}
-}
- 
+interface IConverter {
+	public function convert($input);
+} 
