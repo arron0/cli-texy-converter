@@ -1,6 +1,6 @@
 {
 	"name": "arron/cli-texy-converter",
-	"description": "",
+	"description": "For converting Texy files to HTML or GitHub Markdown via command line.",
 	"type": "library",
 	"keywords": [
 
@@ -19,7 +19,7 @@
 	"autoload": {
 		"classmap": ["Converter/"]
 	},
-	"bin": ["convert.php"],
+	"bin": ["convert"],
 	"authors": [
 		{
 			"name": "Tomáš Lembacher",

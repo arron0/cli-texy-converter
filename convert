@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /**
  * Requires PHP Version 5.3 (min)

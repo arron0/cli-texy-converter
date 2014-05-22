@@ -14,7 +14,7 @@ Use [composer](http://getcomposer.org) to install TestIt. Just add **arron/cli-t
 ### Command line
 
 ```
-php convert.php texy [-t|--template="..."] [-f|--force] from to
+convert texy [-t|--template="..."] [-f|--force] from to
 ```
 
 - **from** is source texy file
