@@ -10,7 +10,7 @@
 		"php": ">=5.3.3",
 		"symfony/console": "*",
 		"texy/texy": "*",
-		"latte/latte": "dev-master",
+		"latte/latte": "*",
 		"kukulich/fshl": "*"
 	},
 	"require-dev": {

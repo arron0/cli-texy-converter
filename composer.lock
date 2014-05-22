@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "5b1b22e3ecc3b4024edeb735234c29fd",
+    "hash": "1968eae48b517fe522a03d52e4a2ece3",
     "packages": [
         {
             "name": "kukulich/fshl",
@@ -49,16 +49,16 @@
         },
         {
             "name": "latte/latte",
-            "version": "dev-master",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/latte.git",
-                "reference": "377d333175cdafb7788960759f2215a2c8b9fc9c"
+                "reference": "447cd516177b271cccbe250b2e392dc83a1b64ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/latte/zipball/377d333175cdafb7788960759f2215a2c8b9fc9c",
-                "reference": "377d333175cdafb7788960759f2215a2c8b9fc9c",
+                "url": "https://api.github.com/repos/nette/latte/zipball/447cd516177b271cccbe250b2e392dc83a1b64ce",
+                "reference": "447cd516177b271cccbe250b2e392dc83a1b64ce",
                 "shasum": ""
             },
             "require": {
@@ -68,11 +68,6 @@
                 "nette/tester": "~1.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.3-dev"
-                }
-            },
             "autoload": {
                 "classmap": [
                     "src/"
@@ -100,7 +95,7 @@
                 "templating",
                 "twig"
             ],
-            "time": "2014-05-15 16:37:16"
+            "time": "2014-05-06 19:36:49"
         },
         {
             "name": "symfony/console",
@@ -961,9 +956,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "latte/latte": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": {
         "php": ">=5.3.3"
     },
