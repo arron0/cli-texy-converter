@@ -19,6 +19,7 @@
 	"autoload": {
 		"classmap": ["Converter/"]
 	},
+	"bin": ["Converter/convert.php"],
 	"authors": [
 		{
 			"name": "Tomáš Lembacher",
