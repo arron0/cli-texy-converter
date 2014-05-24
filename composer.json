@@ -8,10 +8,10 @@
 	"license": "GPL (optional either v2 or any later version)",
 	"require": {
 		"php": ">=5.3.3",
-		"symfony/console": "*",
+		"symfony/console": "2.*",
 		"texy/texy": "<=2.5",
-		"latte/latte": "*",
-		"kukulich/fshl": "*"
+		"latte/latte": "2.*",
+		"kukulich/fshl": "2.*"
 	},
 	"require-dev": {
 		"arron/testit": "*"
