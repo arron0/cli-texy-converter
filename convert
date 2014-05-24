@@ -13,7 +13,23 @@ namespace Arron\Converter;
 
 use Symfony\Component\Console\Application;
 
-require_once "vendor/autoload.php";
+$loaded = FALSE;
+
+foreach (array(__DIR__ . '/../../autoload.php', __DIR__ . '/vendor/autoload.php') as $file) {
+	if (file_exists($file)) {
+		$loaded = TRUE;
+		require_once $file;
+		break;
+	}
+}
+
+if (!$loaded) {
+	die(
+			'You need to set up the project dependencies using the following commands:' . PHP_EOL .
+			'wget http://getcomposer.org/composer.phar' . PHP_EOL .
+			'php composer.phar install' . PHP_EOL
+	);
+}
 
 $application = new Application('Texy converter', '1.0.0');
 $application->add(new Convert());
