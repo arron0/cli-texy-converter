@@ -24,7 +24,7 @@ class HtmlConverter implements IConverter
 
 	public function convert($input)
 	{
-		$convertor = new \Texy();
+		$convertor = new \Texy\Texy();
 		return $convertor->process($input);
 	}
 }

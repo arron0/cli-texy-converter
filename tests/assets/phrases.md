@@ -38,7 +38,7 @@ notexy
 
 [Google](google.com)
 
-[http://www.google.com/search?q=%s](http://www.google.com/search?q=%s)(google.com)
+[https://www.google.com/search?q=%s](https://www.google.com/search?q=%s)(google.com)
 
-[http://www.google.com/search?q=%s](http://www.google.com/search?q=%s)(google.com)
+[https://www.google.com/search?q=%s](https://www.google.com/search?q=%s)(google.com)
 

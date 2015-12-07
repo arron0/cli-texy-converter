@@ -10,29 +10,29 @@
 
 namespace Arron\Converter;
 
-use TexyBlockModule;
-use TexyBlockParser;
-use TexyBlockQuoteModule;
-use TexyEmoticonModule;
-use TexyFigureModule;
-use TexyHandlerInvocation;
-use TexyHeadingModule;
-use TexyHorizLineModule;
-use TexyHtml;
-use TexyHtmlModule;
-use TexyHtmlOutputModule;
-use TexyImage;
-use TexyImageModule;
-use TexyLink;
-use TexyLinkModule;
-use TexyListModule;
-use TexyLongWordsModule;
-use TexyModifier;
-use TexyParagraphModule;
-use TexyPhraseModule;
-use TexyScriptModule;
-use TexyTableModule;
-use TexyTypographyModule;
+use Texy\Modules\BlockModule;
+use Texy\BlockParser;
+use Texy\Modules\BlockQuoteModule;
+use Texy\Modules\EmoticonModule;
+use Texy\Modules\FigureModule;
+use Texy\HandlerInvocation;
+use Texy\Modules\HeadingModule;
+use Texy\Modules\HorizLineModule;
+use Texy\HtmlElement;
+use Texy\Modules\HtmlModule;
+use Texy\Modules\HtmlOutputModule;
+use Texy\Image;
+use Texy\Modules\ImageModule;
+use Texy\Link;
+use Texy\Modules\LinkModule;
+use Texy\Modules\ListModule;
+use Texy\Modules\LongWordsModule;
+use Texy\Modifier;
+use Texy\Modules\ParagraphModule;
+use Texy\Modules\PhraseModule;
+use Texy\Modules\ScriptModule;
+use Texy\Modules\TableModule;
+use Texy\Modules\TypographyModule;
 
 /**
  * TexyToMarkdown class definition
@@ -42,7 +42,7 @@ use TexyTypographyModule;
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license
  */
-class TexyToMarkdown extends \Texy
+class TexyToMarkdown extends \Texy\Texy
 {
 	public $phrasesTranslation = array(
 			'phrase/strong+em' => array('_**', "**_"),
@@ -157,22 +157,22 @@ class TexyToMarkdown extends \Texy
 	protected function loadModules()
 	{
 		// line parsing
-		$this->scriptModule = new TexyScriptModule($this);
-		$this->htmlModule = new TexyHtmlModule($this);
-		$this->imageModule = new TexyImageModule($this);
-		$this->phraseModule = new TexyPhraseModule($this);
-		$this->linkModule = new TexyLinkModule($this);
-		$this->emoticonModule = new TexyEmoticonModule($this);
+		$this->scriptModule = new ScriptModule($this);
+		$this->htmlModule = new HtmlModule($this);
+		$this->imageModule = new ImageModule($this);
+		$this->phraseModule = new PhraseModule($this);
+		$this->linkModule = new LinkModule($this);
+		$this->emoticonModule = new EmoticonModule($this);
 
 		// block parsing
-		$this->paragraphModule = new TexyParagraphModule($this);
-		$this->blockModule = new TexyBlockModule($this);
-		$this->figureModule = new TexyFigureModule($this);
-		$this->horizLineModule = new TexyHorizLineModule($this);
-		$this->blockQuoteModule = new TexyBlockQuoteModule($this);
-		$this->tableModule = new TexyTableModule($this);
-		$this->headingModule = new TexyHeadingModule($this);
-		$this->listModule = new TexyListModule($this);
+		$this->paragraphModule = new ParagraphModule($this);
+		$this->blockModule = new BlockModule($this);
+		$this->figureModule = new FigureModule($this);
+		$this->horizLineModule = new HorizLineModule($this);
+		$this->blockQuoteModule = new BlockQuoteModule($this);
+		$this->tableModule = new TableModule($this);
+		$this->headingModule = new HeadingModule($this);
+		$this->listModule = new ListModule($this);
 
 		// post process
 		// don't want even register their event, they are altering output
@@ -190,15 +190,15 @@ class TexyToMarkdown extends \Texy
 	/**
 	 * @TODO Add support for dynamic leveling
 	 *
-	 * @param TexyHandlerInvocation $invocation
+	 * @param HandlerInvocation $invocation
 	 * @param integer $level
 	 * @param string $content
-	 * @param TexyModifier $mod
+	 * @param Modifier $mod
 	 * @param boolean $isSurrounded
 	 *
 	 * @return string
 	 */
-	public function headingHandler(TexyHandlerInvocation $invocation, $level, $content, TexyModifier $mod, $isSurrounded)
+	public function headingHandler(HandlerInvocation $invocation, $level, $content, Modifier $mod, $isSurrounded)
 	{
 		$headingSign = '';
 		for ($i = $level; $i >= 0; $i--) {
@@ -208,15 +208,15 @@ class TexyToMarkdown extends \Texy
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation handler invocation
+	 * @param HandlerInvocation $invocation handler invocation
 	 * @param string $blocktype block type
 	 * @param string $content text to highlight
 	 * @param string $lang language
-	 * @param TexyModifier $modifier modifier
+	 * @param Modifier $modifier modifier
 	 *
 	 * @return string
 	 */
-	public function blockHandler(TexyHandlerInvocation $invocation, $blocktype, $content, $lang, $modifier)
+	public function blockHandler(HandlerInvocation $invocation, $blocktype, $content, $lang, $modifier)
 	{
 		switch($blocktype) {
 			case 'block/html' :
@@ -229,11 +229,11 @@ class TexyToMarkdown extends \Texy
 	}
 
 	/**
-	 * @param TexyBlockParser $parser
-	 * @param TexyHtml $el
-	 * @param TexyModifier $mod
+	 * @param BlockParser $parser
+	 * @param HtmlElement $el
+	 * @param Modifier $mod
 	 */
-	public function afterBlockquoteHandler(TexyBlockParser $parser, TexyHtml $el, TexyModifier $mod)
+	public function afterBlockquoteHandler(BlockParser $parser, HtmlElement $el, Modifier $mod)
 	{
 		$el->setName(NULL);
 		foreach($el->getChildren() as $children) {
@@ -246,77 +246,77 @@ class TexyToMarkdown extends \Texy
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation
+	 * @param HandlerInvocation $invocation
 	 * @param string $emoticon
 	 * @param string $raw
 	 *
 	 * @return string
 	 */
-	public function emoticonHandler(TexyHandlerInvocation $invocation, $emoticon, $raw)
+	public function emoticonHandler(HandlerInvocation $invocation, $emoticon, $raw)
 	{
 		return $emoticon;
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation
+	 * @param HandlerInvocation $invocation
 	 * @param $content
-	 * @param TexyModifier $mod
+	 * @param Modifier $mod
 	 *
 	 * @return string
 	 */
-	public function paragraphHandler(TexyHandlerInvocation $invocation, $content, TexyModifier $mod = NULL)
+	public function paragraphHandler(HandlerInvocation $invocation, $content, Modifier $mod = NULL)
 	{
-		$el = TexyHtml::el();
+		$el = HtmlElement::el();
 		$el->parseLine($this, $content);
 		$content = $el->getText(); // string
 		return $content.  "\n\n";
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation
-	 * @param TexyHtml $el
+	 * @param HandlerInvocation $invocation
+	 * @param HtmlElement $el
 	 * @param boolean $isStart
 	 * @param boolean $forceEmpty
 	 *
 	 * @return string
 	 */
-	public function htmlTagHandler(TexyHandlerInvocation $invocation, TexyHtml $el, $isStart, $forceEmpty)
+	public function htmlTagHandler(HandlerInvocation $invocation, HtmlElement $el, $isStart, $forceEmpty)
 	{
 		$result = $isStart ? $el->startTag() : $el->endTag();
 		return $result;
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation
+	 * @param HandlerInvocation $invocation
 	 * @param string $content
 	 *
 	 * @return string
 	 */
-	public function htmlCommentHandler(TexyHandlerInvocation $invocation, $content)
+	public function htmlCommentHandler(HandlerInvocation $invocation, $content)
 	{
 		return '<!-- ' . $content . '-->';
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation
+	 * @param HandlerInvocation $invocation
 	 * @param string $type
-	 * @param TexyModifier $mod
+	 * @param Modifier $mod
 	 *
 	 * @return string
 	 */
-	public function horizlineHandler(TexyHandlerInvocation $invocation, $type, TexyModifier $mod)
+	public function horizlineHandler(HandlerInvocation $invocation, $type, Modifier $mod)
 	{
 		return $type . "\n\n";
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation
-	 * @param TexyImage $image
-	 * @param TexyLink $link
+	 * @param HandlerInvocation $invocation
+	 * @param Image $image
+	 * @param Link $link
 	 *
 	 * @return string
 	 */
-	public function imageHandler(TexyHandlerInvocation $invocation, TexyImage $image, TexyLink $link = NULL)
+	public function imageHandler(HandlerInvocation $invocation, Image $image, Link $link = NULL)
 	{
 		//  ![Alt text](/path/to/img.jpg "Optional title")
 		$altText = empty($image->modifier->title) ? $image->URL : $image->modifier->title;
@@ -324,28 +324,28 @@ class TexyToMarkdown extends \Texy
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation
-	 * @param TexyImage $image
-	 * @param TexyLink $link
+	 * @param HandlerInvocation $invocation
+	 * @param Image $image
+	 * @param Link $link
 	 * @param string $content
-	 * @param TexyModifier $mod
+	 * @param Modifier $mod
 	 *
 	 * @return string
 	 */
-	public function figureHandler(TexyHandlerInvocation $invocation, TexyImage $image, $link, $content, TexyModifier $mod)
+	public function figureHandler(HandlerInvocation $invocation, Image $image, $link, $content, Modifier $mod)
 	{
 		$altText = empty($image->modifier->title) ? $image->URL : $image->modifier->title;
 		return "![$altText]({$image->URL} \"$content\")";
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation
-	 * @param TexyLink $link
+	 * @param HandlerInvocation $invocation
+	 * @param Link $link
 	 * @param string $content
 	 *
 	 * @return string
 	 */
-	public function linkReferenceHandler(TexyHandlerInvocation $invocation, TexyLink $link, $content)
+	public function linkReferenceHandler(HandlerInvocation $invocation, Link $link, $content)
 	{
 		// [id]: http://example.com/  "Optional Title Here"
 		$protectedLink = $this->protect($link->URL, self::CONTENT_TEXTUAL);
@@ -355,39 +355,39 @@ class TexyToMarkdown extends \Texy
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation
-	 * @param TexyLink $link
+	 * @param HandlerInvocation $invocation
+	 * @param Link $link
 	 *
 	 * @return string
 	 */
-	public function linkEmailHandler(TexyHandlerInvocation $invocation, TexyLink $link)
+	public function linkEmailHandler(HandlerInvocation $invocation, Link $link)
 	{
 		//raw email somewhere in the text. Leaving unchanged, let the markdown dwal with it
 		return $link->raw;
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation
-	 * @param TexyLink $link
+	 * @param HandlerInvocation $invocation
+	 * @param Link $link
 	 *
 	 * @return string
 	 */
-	public function linkUrlHandler(TexyHandlerInvocation $invocation, TexyLink $link)
+	public function linkUrlHandler(HandlerInvocation $invocation, Link $link)
 	{
 		//raw url somewhere in the text. Leaving unchanged, let the markdown deal with it.
 		return $link->raw;
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation
+	 * @param HandlerInvocation $invocation
 	 * @param string $phrase Phrase name
 	 * @param string $content
-	 * @param TexyModifier $mod
-	 * @param TexyLink $link
+	 * @param Modifier $mod
+	 * @param Link $link
 	 *
 	 * @return string
 	 */
-	public function phraseHandler(TexyHandlerInvocation $invocation, $phrase, $content, TexyModifier $mod, TexyLink $link = NULL)
+	public function phraseHandler(HandlerInvocation $invocation, $phrase, $content, Modifier $mod, Link $link = NULL)
 	{
 		if ($link) {
 			return $this->linkReferenceHandler($invocation, $link, $content);

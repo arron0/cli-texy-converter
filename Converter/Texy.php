@@ -12,10 +12,10 @@ namespace Arron\Converter;
 
 use FSHL\Highlighter;
 use FSHL\Output;
-use TexyLink;
-use TexyHandlerInvocation;
-use TexyHtml;
-use TexyModifier;
+use Texy\Link;
+use Texy\HandlerInvocation;
+use Texy\HtmlElement;
+use Texy\Modifier;
 
 /**
  * Texy class definition
@@ -25,7 +25,7 @@ use TexyModifier;
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license
  */
-class Texy extends \Texy
+class Texy extends \Texy\Texy
 {
 	function __construct()
 	{
@@ -38,23 +38,23 @@ class Texy extends \Texy
 		$this->addHandler('script', array($this, 'scriptHandler'));
 		$this->addHandler('phrase', array($this, 'phraseHandler'));
 
-		$link = new TexyLink('http://www.google.com/search?q=%s');
+		$link = new Link('http://www.google.com/search?q=%s');
 		$this->linkModule->addReference('google', $link);
 
-		$link = new TexyLink('http://en.wikipedia.org/wiki/Special:Search?search=%s');
+		$link = new Link('http://en.wikipedia.org/wiki/Special:Search?search=%s');
 		$this->linkModule->addReference('wikipedia', $link);
 
-		$link = new TexyLink('http://php.net/%s');
+		$link = new Link('http://php.net/%s');
 		$this->linkModule->addReference('php', $link);
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation handler invocation
+	 * @param HandlerInvocation $invocation handler invocation
 	 * @param string $cmd command
 	 * @param array $args arguments
 	 * @param string $raw arguments in raw format
 	 *
-	 * @return TexyHtml|string|FALSE
+	 * @return HtmlElement|string|FALSE
 	 */
 	public function scriptHandler($invocation, $cmd, $args, $raw)
 	{
@@ -62,19 +62,19 @@ class Texy extends \Texy
 	}
 
 	/**
-	 * @param TexyHandlerInvocation $invocation handler invocation
+	 * @param HandlerInvocation $invocation handler invocation
 	 * @param string $phrase
 	 * @param string $content
-	 * @param TexyModifier $modifier
-	 * @param TexyLink $link
+	 * @param Modifier $modifier
+	 * @param Link $link
 	 *
-	 * @return TexyHtml|string|FALSE
+	 * @return HtmlElement|string|FALSE
 	 */
 	public function phraseHandler($invocation, $phrase, $content, $modifier, $link)
 	{
 		if (!$link) {
 			$el = $invocation->proceed();
-			if ($el instanceof TexyHtml && $el->getName() !== 'a' && $el->title !== NULL) {
+			if ($el instanceof HtmlElement && $el->getName() !== 'a' && $el->title !== NULL) {
 				$el->class[] = 'about';
 			}
 			return $el;
@@ -86,13 +86,13 @@ class Texy extends \Texy
 	/**
 	 * User handler for code block
 	 *
-	 * @param TexyHandlerInvocation $invocation handler invocation
+	 * @param HandlerInvocation $invocation handler invocation
 	 * @param string $blocktype block type
 	 * @param string $content text to highlight
 	 * @param string $lang language
-	 * @param TexyModifier $modifier modifier
+	 * @param Modifier $modifier modifier
 	 *
-	 * @return TexyHtml
+	 * @return HtmlElement
 	 */
 	function blockHandler($invocation, $blocktype, $content, $lang, $modifier)
 	{
@@ -113,7 +113,7 @@ class Texy extends \Texy
 		$content = $parser->highlight($content);
 		$content = $this->protect($content, Texy::CONTENT_BLOCK);
 
-		$elPre = TexyHtml::el('pre');
+		$elPre = HtmlElement::el('pre');
 		if ($modifier) {
 			$modifier->decorate($this, $elPre);
 		}
