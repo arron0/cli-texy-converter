@@ -5,7 +5,7 @@
 	"keywords": [
 
 	],
-	"license": "GPL (optional either v2 or any later version)",
+	"license": "GPL-1.0-or-later",
 	"require": {
 		"php": ">=5.4.4",
 		"symfony/console": "2.*",
