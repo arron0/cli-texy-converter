@@ -11,6 +11,7 @@
 
 namespace Arron\Converter;
 
+use Texy\Helpers;
 use Texy\Modules\BlockModule;
 use Texy\BlockParser;
 use Texy\Modules\BlockQuoteModule;
@@ -155,7 +156,7 @@ class TexyToMarkdown extends \Texy\Texy
 	 * Create array of all used modules ($this->modules).
 	 * This array can be changed by overriding this method (by subclasses)
 	 */
-	protected function loadModules()
+	protected function loadModules(): void
 	{
 		// line parsing
 		$this->scriptModule = new ScriptModule($this);
@@ -182,10 +183,10 @@ class TexyToMarkdown extends \Texy\Texy
 		//$this->htmlOutputModule = new TexyHtmlOutputModule($this);
 	}
 
-	public function process($text, $singleLine = false)
+	public function process($text, $singleLine = false): string
 	{
 		$s = parent::process($text, $singleLine);
-		return self::unescapeHtml($s);
+		return Helpers::unescapeHtml($s);
 	}
 
 	/**
@@ -199,7 +200,7 @@ class TexyToMarkdown extends \Texy\Texy
 	 *
 	 * @return string
 	 */
-	public function headingHandler(HandlerInvocation $invocation, $level, $content, Modifier $mod, $isSurrounded)
+	public function headingHandler(HandlerInvocation $invocation, $level, $content, Modifier $mod, $isSurrounded): string
 	{
 		$headingSign = '';
 		for ($i = $level; $i >= 0; $i--) {
@@ -217,7 +218,7 @@ class TexyToMarkdown extends \Texy\Texy
 	 *
 	 * @return string
 	 */
-	public function blockHandler(HandlerInvocation $invocation, $blocktype, $content, $lang, $modifier)
+	public function blockHandler(HandlerInvocation $invocation, $blocktype, $content, $lang, $modifier): string
 	{
 		switch ($blocktype) {
 			case 'block/html':
@@ -253,7 +254,7 @@ class TexyToMarkdown extends \Texy\Texy
 	 *
 	 * @return string
 	 */
-	public function emoticonHandler(HandlerInvocation $invocation, $emoticon, $raw)
+	public function emoticonHandler(HandlerInvocation $invocation, $emoticon, $raw): string
 	{
 		return $emoticon;
 	}
@@ -298,16 +299,11 @@ class TexyToMarkdown extends \Texy\Texy
 		return '<!-- ' . $content . '-->';
 	}
 
-	/**
-	 * @param HandlerInvocation $invocation
-	 * @param string $type
-	 * @param Modifier $mod
-	 *
-	 * @return string
-	 */
 	public function horizlineHandler(HandlerInvocation $invocation, $type, Modifier $mod)
 	{
-		return $type . "\n\n";
+		$el = new HtmlElement();
+		$el->setText($type . "\n\n");
+		return $el;
 	}
 
 	/**

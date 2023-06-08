@@ -4,9 +4,9 @@
     </tr>
 </table>
 
-<br />
+<br>
 
-<hr />
+<hr>
 
 <!--  html Comment -->
 
