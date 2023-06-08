@@ -1,23 +1,9 @@
 <?php
-/**
- * Requires PHP Version 5.3 (min)
- *
- * @package
- * @subpackage
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license
- */
-/**
- * TexyToMarkdownUnitTest class definition
- *
- * @package
- * @subpackage
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license
- */
+
+namespace unitTests;
+
 class TexyToMarkdownUnitTest extends \Arron\TestIt\TestCase
 {
-	
 	/**
 	 * @return object
 	 */
@@ -34,11 +20,11 @@ class TexyToMarkdownUnitTest extends \Arron\TestIt\TestCase
 		$texySourceFile = ASSETS_DIR . '/' . $texySourceFile;
 		$markdownExpectedResultFile = ASSETS_DIR . '/' . $markdownExpectedResultFile;
 
-		if(!file_exists($texySourceFile)) {
+		if (!file_exists($texySourceFile)) {
 			$this->fail("The source file $texySourceFile does not exist.");
 		}
 
-		if( !file_exists($markdownExpectedResultFile)) {
+		if (!file_exists($markdownExpectedResultFile)) {
 			$this->fail("The expected result file $markdownExpectedResultFile does not exist.");
 		}
 

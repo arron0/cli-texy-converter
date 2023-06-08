@@ -7,14 +7,20 @@
 	],
 	"license": "GPL-1.0-or-later",
 	"require": {
-		"php": ">=5.4.4",
+		"php": ">=7.4",
 		"symfony/console": "2.*",
-		"texy/texy": ">=2.8",
+		"texy/texy": "2.9.3",
 		"latte/latte": "2.*",
 		"kukulich/fshl": "2.*"
 	},
 	"require-dev": {
-		"arron/testit": "*"
+		"arron/testit": "*",
+		"squizlabs/php_codesniffer": "*"
+	},
+	"scripts": {
+		"phpcs": "./vendor/bin/phpcs -p -n --standard=phpcs.xml",
+		"fix-style": "./vendor/bin/phpcbf -p -n --standard=phpcs.xml",
+		"tests-unit": "./vendor/bin/phpunit --configuration ./tests/testsConfig.xml ./tests/unitTests"
 	},
 	"autoload": {
 		"classmap": ["Converter/"]

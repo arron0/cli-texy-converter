@@ -9,7 +9,6 @@
 <phpunit
         bootstrap="bootstrap.php"
         colors="true"
-        strict="false"
         verbose="true"
         >
     <filter>
@@ -17,11 +16,12 @@
             <directory suffix=".php">../Converter</directory>
         </whitelist>
     </filter>
-
-    <logging>
-        <log type="coverage-html" target="coverage/" charset="UTF-8"
-             yui="true" highlight="true"
-             lowUpperBound="35" highLowerBound="70"/>
-    </logging>
-</phpunit>
+    <!--
+        <logging>
+            <log type="coverage-html" target="coverage/" charset="UTF-8"
+                 yui="true" highlight="true"
+                 lowUpperBound="35" highLowerBound="70"/>
+        </logging>
+        -->
+    </phpunit>
 

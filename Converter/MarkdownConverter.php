@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Requires PHP Version 5.3 (min)
  *
@@ -26,4 +27,3 @@ class MarkdownConverter implements IConverter
 		return $texy->process($input);
 	}
 }
- 
