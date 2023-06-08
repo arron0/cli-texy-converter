@@ -13,6 +13,7 @@ namespace Arron\Converter;
 
 use FSHL\Highlighter;
 use FSHL\Output;
+use Texy\Helpers;
 use Texy\Link;
 use Texy\HandlerInvocation;
 use Texy\HtmlElement;
@@ -110,7 +111,7 @@ class Texy extends \Texy\Texy
 		$parser = new Highlighter(new Output\Html(), Highlighter::OPTION_TAB_INDENT);
 		$parser->setLexer(new $lexerClassName());
 
-		$content = Texy::outdent($content);
+		$content = Helpers::outdent($content);
 		$content = $parser->highlight($content);
 		$content = $this->protect($content, Texy::CONTENT_BLOCK);
 

@@ -9,7 +9,7 @@
 	"require": {
 		"php": ">=7.4",
 		"symfony/console": "2.*",
-		"texy/texy": "2.9.3",
+		"texy/texy": ">=3.0.0",
 		"latte/latte": "2.*",
 		"kukulich/fshl": "2.*"
 	},
