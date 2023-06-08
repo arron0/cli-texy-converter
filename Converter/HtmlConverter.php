@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Requires PHP Version 5.3 (min)
  *
@@ -10,7 +11,6 @@
 
 namespace Arron\Converter;
 
-
 /**
  * HtmlConverter class definition
  *
@@ -21,11 +21,9 @@ namespace Arron\Converter;
  */
 class HtmlConverter implements IConverter
 {
-
 	public function convert($input)
 	{
 		$convertor = new \Texy\Texy();
 		return $convertor->process($input);
 	}
 }
- 

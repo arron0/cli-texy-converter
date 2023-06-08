@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Requires PHP Version 5.3 (min)
  *
@@ -27,12 +28,12 @@ use Texy\Modifier;
  */
 class Texy extends \Texy\Texy
 {
-	function __construct()
+	public function __construct()
 	{
 		parent::__construct();
 
 		$this->headingModule->top = 1;
-		$this->headingModule->generateID = TRUE;
+		$this->headingModule->generateID = true;
 
 		$this->addHandler('block', array($this, 'blockHandler'));
 		$this->addHandler('script', array($this, 'scriptHandler'));
@@ -74,7 +75,7 @@ class Texy extends \Texy\Texy
 	{
 		if (!$link) {
 			$el = $invocation->proceed();
-			if ($el instanceof HtmlElement && $el->getName() !== 'a' && $el->title !== NULL) {
+			if ($el instanceof HtmlElement && $el->getName() !== 'a' && $el->title !== null) {
 				$el->class[] = 'about';
 			}
 			return $el;
@@ -94,7 +95,7 @@ class Texy extends \Texy\Texy
 	 *
 	 * @return HtmlElement
 	 */
-	function blockHandler($invocation, $blocktype, $content, $lang, $modifier)
+	public function blockHandler($invocation, $blocktype, $content, $lang, $modifier)
 	{
 		if ($blocktype !== 'block/code') {
 			return $invocation->proceed();
@@ -102,12 +103,12 @@ class Texy extends \Texy\Texy
 
 		$lang = ucfirst($lang);
 		$lexerClassName = 'FSHL\Lexer\\' . $lang;
-		if(!class_exists($lexerClassName)) {
+		if (!class_exists($lexerClassName)) {
 			return $invocation->proceed();
 		}
 
 		$parser = new Highlighter(new Output\Html(), Highlighter::OPTION_TAB_INDENT);
-		$parser->setLexer(new $lexerClassName);
+		$parser->setLexer(new $lexerClassName());
 
 		$content = Texy::outdent($content);
 		$content = $parser->highlight($content);
@@ -124,4 +125,3 @@ class Texy extends \Texy\Texy
 		return $elPre;
 	}
 }
- 

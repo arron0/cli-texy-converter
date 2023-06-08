@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Requires PHP Version 5.3 (min)
  *
@@ -34,26 +35,26 @@ class Convert extends Command
 				->setName('texy')
 				->setDescription('Convert from Texy.')
 				->addArgument(
-						'from',
-						InputArgument::REQUIRED,
-						'Texy source file.'
+					'from',
+					InputArgument::REQUIRED,
+					'Texy source file.'
 				)
 				->addArgument(
-						'to',
-						InputArgument::REQUIRED,
-						'Target file.'
+					'to',
+					InputArgument::REQUIRED,
+					'Target file.'
 				)
 				->addOption(
-						'template',
-						't',
-						InputOption::VALUE_REQUIRED,
-						'Specifies the Latte template to use. There will be $content abailable in the template.'
+					'template',
+					't',
+					InputOption::VALUE_REQUIRED,
+					'Specifies the Latte template to use. There will be $content abailable in the template.'
 				)
 				->addOption(
-						'force',
-						'f',
-						InputOption::VALUE_NONE,
-						'Forcing script to overwrite any target file.'
+					'force',
+					'f',
+					InputOption::VALUE_NONE,
+					'Forcing script to overwrite any target file.'
 				);
 	}
 
@@ -62,20 +63,20 @@ class Convert extends Command
 		$from = $input->getArgument('from');
 		$to = $input->getArgument('to');
 
-		if(file_exists($to) && !$input->getOption('force')) {
+		if (file_exists($to) && !$input->getOption('force')) {
 			throw new \InvalidArgumentException("Target file $to already exists. Use --force option to force rewrite it.");
 		}
 
-		$fileExtension = strtolower(end(explode('.',$to)));
+		$fileExtension = strtolower(end(explode('.', $to)));
 
 		$translator = null;
-		switch($fileExtension) {
-			case 'html' :
-			case 'htm' :
+		switch ($fileExtension) {
+			case 'html':
+			case 'htm':
 				$translator = new HtmlConverter();
 				break;
 
-			case 'md' :
+			case 'md':
 				$translator = new MarkdownConverter();
 				break;
 
@@ -84,7 +85,7 @@ class Convert extends Command
 		}
 
 
-		if(!file_exists($from)) {
+		if (!file_exists($from)) {
 			throw new \InvalidArgumentException("Source file $from doesn't exist.");
 		}
 
@@ -92,12 +93,12 @@ class Convert extends Command
 
 		$target = $translator->convert($source);
 
-		if($template = $input->getOption('template')) {
-			if(!file_exists($template)) {
+		if ($template = $input->getOption('template')) {
+			if (!file_exists($template)) {
 				throw new \InvalidArgumentException("Template $template doesn't exist.");
 			}
 
-			$latte = new Latte\Engine;
+			$latte = new Latte\Engine();
 			$params['content'] = $target;
 			$target = $latte->renderToString($template, $params);
 		}
@@ -107,4 +108,3 @@ class Convert extends Command
 		$output->writeln("Texy from $from converted to $to.");
 	}
 }
- 

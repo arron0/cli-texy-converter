@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Requires PHP Version 5.3 (min)
  *
@@ -10,7 +11,6 @@
 
 namespace Arron\Converter;
 
-
 /**
  * IConverter interface definition
  *
@@ -19,6 +19,7 @@ namespace Arron\Converter;
  * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
  * @license
  */
-interface IConverter {
+interface IConverter
+{
 	public function convert($input);
-} 
+}
