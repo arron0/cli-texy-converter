@@ -2,6 +2,7 @@ stages:
   - code style
   - static analysis
   - tests
+  - release
 
 Code sniffer:
   stage: code style
@@ -35,3 +36,15 @@ Unit tests:
     key: $CI_COMMIT_SHORT_SHA
     paths:
       - vendor
+
+Github release:
+  stage: release
+  when: manual
+  script:
+    - git clone https://${CI_JOB_TOKEN}@gitlab.com/${CI_PROJECT_PATH}.git
+    - cd ${CI_PROJECT_NAME}
+    - git remote add github https://${GITHUB_TOKEN}@github.com/arron0/cli-texy-converter.git
+    - git push github HEAD:master --tags --dry-run
+  only:
+    - master
+    - tags
