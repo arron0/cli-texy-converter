@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.4
+ARG PHP_VERSION=8.0
 FROM php:${PHP_VERSION}-cli
 
 LABEL maintainer="Tomáš Lembacher <tomas.lembacher@seznam.cz>"
@@ -12,7 +12,7 @@ RUN apt-get install -y \
         zip \
         mc
 
-RUN pecl install xdebug-2.9.5 \
+RUN pecl install xdebug-3.2.1 \
 	&& echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
