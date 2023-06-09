@@ -21,7 +21,7 @@ namespace Arron\Converter;
  */
 class MarkdownConverter implements IConverter
 {
-	public function convert($input)
+	public function convert(string $input): string
 	{
 		$texy = new TexyToMarkdown();
 		return $texy->process($input);

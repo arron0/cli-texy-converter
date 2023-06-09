@@ -1,17 +1,7 @@
 <?php
 
-/**
- * Requires PHP Version 5.3 (min)
- *
- * @package
- * @subpackage
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license
- */
-
 namespace Arron\Converter;
 
-use FSHL\Lexer\Cache\Html;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,17 +9,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Latte;
 
-/**
- * Convert class definition
- *
- * @package
- * @subpackage
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license
- */
 class Convert extends Command
 {
-	protected function configure()
+	protected function configure(): void
 	{
 		$this
 				->setName('texy')
@@ -63,11 +45,22 @@ class Convert extends Command
 		$from = $input->getArgument('from');
 		$to = $input->getArgument('to');
 
+		if (!is_string($from)) {
+			$type = gettype($from);
+			throw new \InvalidArgumentException("Parameter 'from' has to be string $type given.");
+		}
+
+		if (!is_string($to)) {
+			$type = gettype($to);
+			throw new \InvalidArgumentException("Parameter 'to' has to be string $type given.");
+		}
+
 		if (file_exists($to) && !$input->getOption('force')) {
 			throw new \InvalidArgumentException("Target file $to already exists. Use --force option to force rewrite it.");
 		}
 
-		$fileExtension = strtolower(end(explode('.', $to)));
+		$explodedFilename = explode('.', $to);
+		$fileExtension = strtolower(end($explodedFilename));
 
 		$translator = null;
 		switch ($fileExtension) {
@@ -91,9 +84,19 @@ class Convert extends Command
 
 		$source = file_get_contents($from);
 
-		$target = $translator->convert($source);
+		if ($source) {
+			$target = $translator->convert($source);
+		} else {
+			$target = '';
+		}
 
-		if ($template = $input->getOption('template')) {
+		$template = $input->getOption('template');
+		if (!is_string($template)) {
+			$type = gettype($template);
+			throw new \InvalidArgumentException("Parameter 'template' has to be string $type given.");
+		}
+
+		if ($template) {
 			if (!file_exists($template)) {
 				throw new \InvalidArgumentException("Template $template doesn't exist.");
 			}
@@ -106,5 +109,6 @@ class Convert extends Command
 		file_put_contents($to, $target);
 
 		$output->writeln("Texy from $from converted to $to.");
+		return self::SUCCESS;
 	}
 }
