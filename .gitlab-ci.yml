@@ -39,7 +39,9 @@ Unit tests:
 
 Github release:
   stage: release
-  image: alpine/git
+  image:
+    name: alpine/git
+    entrypoint: ['']
   when: manual
   script:
     - git clone https://${CI_JOB_TOKEN}@gitlab.com/${CI_PROJECT_PATH}.git
