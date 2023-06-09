@@ -1,10 +1,11 @@
 stages:
   - code style
+  - static analysis
   - tests
 
 Code sniffer:
   stage: code style
-  image: php7.4-extra
+  image: php8.0-extra
   script:
     - composer install
     - composer phpcs
@@ -13,12 +14,23 @@ Code sniffer:
     paths:
       - vendor
 
-Unit tests:
-  stage: tests
-  image: php7.4-extra
+PHP Stan:
+  stage: static analysis
+  image: php8.0-extra
   script:
     - composer install
-    - composer tests-unit
+    - composer phpstan
+  cache:
+    key: $CI_COMMIT_SHORT_SHA
+    paths:
+      - vendor
+
+Unit tests:
+  stage: tests
+  image: php8.0-extra
+  script:
+    - composer install
+    - composer unit-tests
   cache:
     key: $CI_COMMIT_SHORT_SHA
     paths:

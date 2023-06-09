@@ -7,20 +7,22 @@
 	],
 	"license": "GPL-1.0-or-later",
 	"require": {
-		"php": ">=7.4",
-		"symfony/console": "2.*",
+		"php": "~8.0",
+		"symfony/console": "*",
 		"texy/texy": ">=3.0.0",
 		"latte/latte": "2.*",
 		"kukulich/fshl": "2.*"
 	},
 	"require-dev": {
-		"arron/testit": "*",
-		"squizlabs/php_codesniffer": "*"
+		"phpunit/phpunit": "*",
+		"squizlabs/php_codesniffer": "*",
+		"phpstan/phpstan": "*"
 	},
 	"scripts": {
 		"phpcs": "./vendor/bin/phpcs -p -n --standard=phpcs.xml",
 		"fix-style": "./vendor/bin/phpcbf -p -n --standard=phpcs.xml",
-		"tests-unit": "./vendor/bin/phpunit --configuration ./tests/testsConfig.xml ./tests/unitTests"
+		"unit-tests": "./vendor/bin/phpunit --configuration ./tests/testsConfig.xml ./tests/unitTests",
+		"phpstan": "php -n ./vendor/bin/phpstan analyse"
 	},
 	"autoload": {
 		"classmap": ["Converter/"]

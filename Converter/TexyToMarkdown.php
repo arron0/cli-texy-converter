@@ -46,7 +46,7 @@ use Texy\Modules\TypographyModule;
  */
 class TexyToMarkdown extends \Texy\Texy
 {
-	public $phrasesTranslation = array(
+	public array $phrasesTranslation = array(
 			'phrase/strong+em' => array('_**', "**_"),
 			'phrase/strong' => array('**', '**'),
 			'phrase/em' => array('_', '_'),
@@ -183,7 +183,7 @@ class TexyToMarkdown extends \Texy\Texy
 		//$this->htmlOutputModule = new TexyHtmlOutputModule($this);
 	}
 
-	public function process($text, $singleLine = false): string
+	public function process(string $text, bool $singleLine = false): string
 	{
 		$s = parent::process($text, $singleLine);
 		return Helpers::unescapeHtml($s);
@@ -235,11 +235,11 @@ class TexyToMarkdown extends \Texy\Texy
 	 * @param HtmlElement $el
 	 * @param Modifier $mod
 	 */
-	public function afterBlockquoteHandler(BlockParser $parser, HtmlElement $el, Modifier $mod)
+	public function afterBlockquoteHandler(BlockParser $parser, HtmlElement $el, Modifier $mod): void
 	{
 		$el->setName(null);
 		foreach ($el->getChildren() as $children) {
-			if ($children instanceof TexyHtml) {
+			if ($children instanceof HtmlElement) {
 				$children->setName(null);
 			}
 		}
@@ -259,31 +259,22 @@ class TexyToMarkdown extends \Texy\Texy
 		return $emoticon;
 	}
 
-	/**
-	 * @param HandlerInvocation $invocation
-	 * @param $content
-	 * @param Modifier $mod
-	 *
-	 * @return string
-	 */
-	public function paragraphHandler(HandlerInvocation $invocation, $content, Modifier $mod = null)
+	public function paragraphHandler(HandlerInvocation $invocation, string $content, Modifier $mod = null): ?HtmlElement
 	{
 		$el = HtmlElement::el();
 		$el->parseLine($this, $content);
 		$content = $el->getText(); // string
-		return $content .  "\n\n";
+		$el = new HtmlElement();
+		$el->setText($content .  "\n\n");
+		return $el;
 	}
 
-	/**
-	 * @param HandlerInvocation $invocation
-	 * @param HtmlElement $el
-	 * @param boolean $isStart
-	 * @param boolean $forceEmpty
-	 *
-	 * @return string
-	 */
-	public function htmlTagHandler(HandlerInvocation $invocation, HtmlElement $el, $isStart, $forceEmpty)
-	{
+	public function htmlTagHandler(
+		HandlerInvocation $invocation,
+		HtmlElement $el,
+		bool $isStart,
+		?bool $forceEmpty = null
+	): string {
 		$result = $isStart ? $el->startTag() : $el->endTag();
 		return $result;
 	}
@@ -299,7 +290,7 @@ class TexyToMarkdown extends \Texy\Texy
 		return '<!-- ' . $content . '-->';
 	}
 
-	public function horizlineHandler(HandlerInvocation $invocation, $type, Modifier $mod)
+	public function horizlineHandler(HandlerInvocation $invocation, string $type, Modifier $mod): HtmlElement
 	{
 		$el = new HtmlElement();
 		$el->setText($type . "\n\n");
@@ -342,10 +333,11 @@ class TexyToMarkdown extends \Texy\Texy
 	 *
 	 * @return string
 	 */
-	public function linkReferenceHandler(HandlerInvocation $invocation, Link $link, $content)
+	public function linkReferenceHandler(?HandlerInvocation $invocation, Link $link, mixed $content = null): mixed
 	{
 		// [id]: http://example.com/  "Optional Title Here"
-		$protectedLink = $this->protect($link->URL, self::CONTENT_TEXTUAL);
+		$url = $link->URL ?? '';
+		$protectedLink = $this->protect($url, self::CONTENT_TEXTUAL);
 		$linkText = !empty($content) ? $content : (!empty($link->label) ? $link->label : $protectedLink);
 		$markdownLink = "[{$linkText}]($protectedLink)";
 		return $markdownLink;

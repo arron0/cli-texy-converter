@@ -1,17 +1,9 @@
 <?php
 
-/**
- * Requires PHP Version 5.3 (min)
- *
- * @package
- * @subpackage
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license
- */
-
 namespace Arron\Converter;
 
 use FSHL\Highlighter;
+use FSHL\Lexer;
 use FSHL\Output;
 use Texy\Helpers;
 use Texy\Link;
@@ -19,14 +11,6 @@ use Texy\HandlerInvocation;
 use Texy\HtmlElement;
 use Texy\Modifier;
 
-/**
- * Texy class definition
- *
- * @package
- * @subpackage
- * @author Tomáš Lembacher <tomas.lembacher@seznam.cz>
- * @license
- */
 class Texy extends \Texy\Texy
 {
 	public function __construct()
@@ -63,21 +47,25 @@ class Texy extends \Texy\Texy
 		return '';
 	}
 
-	/**
-	 * @param HandlerInvocation $invocation handler invocation
-	 * @param string $phrase
-	 * @param string $content
-	 * @param Modifier $modifier
-	 * @param Link $link
-	 *
-	 * @return HtmlElement|string|FALSE
-	 */
-	public function phraseHandler($invocation, $phrase, $content, $modifier, $link)
-	{
+	public function phraseHandler(
+		HandlerInvocation $invocation,
+		string $phrase,
+		string $content,
+		Modifier $mod,
+		?Link $link = null
+	): mixed {
 		if (!$link) {
 			$el = $invocation->proceed();
-			if ($el instanceof HtmlElement && $el->getName() !== 'a' && $el->title !== null) {
-				$el->class[] = 'about';
+			if ($el instanceof HtmlElement && $el->getName() !== 'a' && $el->getAttribute('title') !== null) {
+				if (isset($el->attrs['class'])) {
+					if (is_array($el->attrs['class'])) {
+						$el->attrs['class'][] = 'about';
+					} else {
+						$el->attrs['class'] = [(string)$el->attrs['class'], 'about'];
+					}
+				} else {
+					$el->attrs['class'] = ['about'];
+				}
 			}
 			return $el;
 		}
@@ -85,43 +73,36 @@ class Texy extends \Texy\Texy
 		return $invocation->proceed();
 	}
 
-	/**
-	 * User handler for code block
-	 *
-	 * @param HandlerInvocation $invocation handler invocation
-	 * @param string $blocktype block type
-	 * @param string $content text to highlight
-	 * @param string $lang language
-	 * @param Modifier $modifier modifier
-	 *
-	 * @return HtmlElement
-	 */
-	public function blockHandler($invocation, $blocktype, $content, $lang, $modifier)
-	{
+	public function blockHandler(
+		HandlerInvocation $invocation,
+		string $blocktype,
+		string $s,
+		string $param,
+		Modifier $mod
+	): mixed {
 		if ($blocktype !== 'block/code') {
 			return $invocation->proceed();
 		}
 
-		$lang = ucfirst($lang);
-		$lexerClassName = 'FSHL\Lexer\\' . $lang;
+		$lang = ucfirst($param);
+		$lexerClassName = 'FSHL\Lexer\\' . $param;
 		if (!class_exists($lexerClassName)) {
 			return $invocation->proceed();
 		}
 
 		$parser = new Highlighter(new Output\Html(), Highlighter::OPTION_TAB_INDENT);
-		$parser->setLexer(new $lexerClassName());
+		/** @var Lexer $lexer */
+		$lexer = new $lexerClassName();
+		$parser->setLexer($lexer);
 
-		$content = Helpers::outdent($content);
+		$content = Helpers::outdent($s);
 		$content = $parser->highlight($content);
-		$content = $this->protect($content, Texy::CONTENT_BLOCK);
+		$content = $this->protect($content, \Texy\Texy::CONTENT_BLOCK);
 
 		$elPre = HtmlElement::el('pre');
-		if ($modifier) {
-			$modifier->decorate($this, $elPre);
-		}
+		$mod->decorate($this, $elPre);
 		$elPre->attrs['class'] = strtolower($lang);
-
-		$elCode = $elPre->create('code', $content);
+		$elPre->create('code', $content);
 
 		return $elPre;
 	}

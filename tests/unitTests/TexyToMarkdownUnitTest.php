@@ -2,21 +2,17 @@
 
 namespace unitTests;
 
-class TexyToMarkdownUnitTest extends \Arron\TestIt\TestCase
-{
-	/**
-	 * @return object
-	 */
-	protected function createTestObject()
-	{
-		return new \Arron\Converter\MarkdownConverter();
-	}
+use Arron\Converter\MarkdownConverter;
+use PHPUnit\Framework\TestCase;
 
+class TexyToMarkdownUnitTest extends TestCase
+{
 	/**
 	 * @dataProvider conversionDataProvider
 	 */
 	public function testConversion($texySourceFile, $markdownExpectedResultFile)
 	{
+		$converter = new MarkdownConverter();
 		$texySourceFile = ASSETS_DIR . '/' . $texySourceFile;
 		$markdownExpectedResultFile = ASSETS_DIR . '/' . $markdownExpectedResultFile;
 
@@ -31,12 +27,12 @@ class TexyToMarkdownUnitTest extends \Arron\TestIt\TestCase
 		$texySource = file_get_contents($texySourceFile);
 		$markdownResult = file_get_contents($markdownExpectedResultFile);
 
-		$returnedResult = $this->getTestObject()->convert($texySource);
+		$returnedResult = $converter->convert($texySource);
 
 		$this->assertEquals($markdownResult, $returnedResult);
 	}
 
-	public function conversionDataProvider()
+	public static function conversionDataProvider(): array
 	{
 		return array(
 				array('blockquotes.texy', 'blockquotes.md'),
